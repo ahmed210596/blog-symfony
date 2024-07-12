@@ -29,4 +29,24 @@ class SecurityController extends AbstractController
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
+    #[Route('/activate/{token}', name: 'app_activate_account')]
+    public function activateAccount(string $token, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
+    {
+        $user = $userRepository->findOneBy(['activationToken' => $token]);
+
+        if ($user) {
+            $user->setIsActive(true);
+            $user->setActivationToken(null);
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Your account has been activated! You can now log in.');
+
+            return $this->redirectToRoute('app_login');
+        }
+
+        $this->addFlash('error', 'Invalid activation token.');
+
+        return $this->redirectToRoute('app_register');
+    }
 }

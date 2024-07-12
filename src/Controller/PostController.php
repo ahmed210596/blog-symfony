@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Persistence\ManagerRegistry as PersistenceManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
-
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 use App\Entity\Category;
 use App\Entity\Post;
@@ -36,8 +36,9 @@ class PostController extends AbstractController
     } */
     
 
-
+   
     #[Route('/updated-post/{id}', name: 'post_update', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_USER')]
     public function updatePost(int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
         $post = $entityManager->getRepository(Post::class)->find($id);
@@ -69,6 +70,7 @@ class PostController extends AbstractController
 
 
     #[Route('/post/{id}', name: 'post_detail')]
+    #[IsGranted('ROLE_USER')]
     public function show(int $id, PostRepository $postRepository): Response
     {
         $post = $postRepository->find($id);
@@ -82,6 +84,7 @@ class PostController extends AbstractController
         ]);
     }
     #[Route('/post', name: 'app_post')]
+    #[IsGranted('ROLE_USER')]
     public function index(Request $request ,PersistenceManagerRegistry $doctrine): Response
     {
         $page = $request->query->getInt('page', 1); // Get page number from query parameter, default to 1 if not provided
@@ -106,6 +109,7 @@ class PostController extends AbstractController
             ]);
     }
     #[Route('/posts/create', name: 'app_post_create', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_USER')]
     public function create(Request $request, EntityManagerInterface $entityManager): Response
     {
         $categories = $entityManager->getRepository(Category::class)->findAll();
@@ -130,6 +134,7 @@ class PostController extends AbstractController
         ]);
     }
     #[Route('/search', name: 'app_search')]
+    #[IsGranted('ROLE_USER')]
     public function search(Request $request, PostRepository $postRepository): Response
     {
         $postResults = [];
@@ -150,7 +155,7 @@ class PostController extends AbstractController
         // Fetch the paginated results
         $paginatedPosts = $paginator->getIterator()->getArrayCopy();
             
-
+        $categories = $this->doctrine->getManager()->getRepository(Category::class)->findAll();
         }
 
 
@@ -158,12 +163,13 @@ class PostController extends AbstractController
            
             'posts' => $paginatedPosts,
              'paginator' => $paginator,
-            
+            'categories' =>$categories, 
 
         ]);
     }
     
     #[Route('/posts/{id}', name: 'post_delete', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
     public function deletePost(Request $request, EntityManagerInterface $em, $id): Response
     {
         $post = $em->getRepository(Post::class)->find($id);

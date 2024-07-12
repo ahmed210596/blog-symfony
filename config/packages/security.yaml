@@ -23,6 +23,7 @@ security:
            
             logout:
                 path: app_logout
+                target: /login
                 # where to redirect after logout
                 # target: app_any_route
 
@@ -33,7 +34,7 @@ security:
                 # by default, the feature is enabled by checking a checkbox in the
                 # login form, uncomment the following line to always enable it.
                 #always_remember_me: true
-
+            
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
 
@@ -46,9 +47,21 @@ security:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
         #- { path: ^/login, roles: IS_AUTHENTICATED_GUEST }
-         #- { path: ^/login, role: IS_AUTHENTICATED_ANONYMOUSLY }
-         #- { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        #- { path: ^/login, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        #- { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        #- { path: ^/post, roles: ROLE_USER }
 
+        # Require authentication for a specific route
+        #- { path: ^/posts/create, roles: ROLE_USER }
+        
+    
+
+    
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
+    
+
+       
 when@test:
     security:
         password_hashers:
