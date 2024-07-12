@@ -5,13 +5,83 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
         {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+            <link rel="stylesheet" href="https://bootswatch.com/5/cerulean/bootstrap.min.css">
+            <style>
+                .navbar .navbar-nav .nav-link {
+                    padding-right: 0.5rem;
+                    padding-left: 0.5rem;
+                }
+                .navbar .navbar-nav .nav-item {
+                    margin-right: 1rem;
+                }
+                @media (max-width: 991.98px) {
+                    .navbar .navbar-nav .nav-item {
+                        margin-right: 0;
+                    }
+                    .navbar .navbar-nav .nav-link {
+                        padding-right: 0.75rem;
+                        padding-left: 0.75rem;
+                    }
+                }
+                .navbar-brand {
+                    font-weight: bold;
+                    font-size: 1.25rem;
+                }
+                @media (max-width: 767.98px) {
+                    .container {
+                        padding-left: 1rem;
+                        padding-right: 1rem;
+                    }
+                }
+            </style>
         {% endblock %}
 
         {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
+            {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">MyBlog</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarColor01">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/post">Posts
+                                <span class="visually-hidden">(current)</span>
+                            </a>
+                        </li>
+                        
+                       
+                        <li class="nav-item">
+                            <a class="nav-link" href="/posts/create">Create Post</a>
+                        </li>
+                    </ul>
+                    <form class="d-flex" action="{{ path('app_search') }}">
+                        <input class="form-control" type="search" placeholder="search" aria-label="Search" name="q">
+                        <button class="btn-outline-success" type="submit">Suchen</button>
+                    </form>
+
+
+                     {% if app.user %}
+                            <div>
+                                Bonjour {{ app.user.email}} <a class="btn btn-sm btn-danger" href="{{ path('app_logout') }}">Déconnexion</a>
+                            </div>
+                        {% else %}
+                            <div>
+                                <a class="btn btn-sm btn-primary" href="{{ path('app_register') }}">S'inscrire</a>
+                                <a class="btn btn-sm btn-success" href="{{ path('app_login') }}">Se connecter</a>
+                            </div>
+                        {% endif %}
+                </div>
+            </div>
+        </nav>
+        <div class="container">
+            {% block body %}{% endblock %}
+        </div>
     </body>
 </html>

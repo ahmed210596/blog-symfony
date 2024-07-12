@@ -1,0 +1,20 @@
+
+
+
+
+
+
+
+
+    <div class="container">
+        {% for post in posts %}
+        <div class="post mb-4">
+            <h2 class="mb-2"><a href="{{ path('post_detail', {'id': post.id}) }}">{{ post.title }}</a></h2>
+            <p>{{ post.content|slice(0, 150) ~ '...' }}</p>
+            <div class="d-flex justify-content-between align-items-center">
+                <p class="mb-0">Created by ahmed nouri</p>
+                <p class="mb-0">Published: {{ post.createdAt|date('M d, Y') }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>

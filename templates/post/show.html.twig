@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}post detail{% endblock %}
+
+{% block body %}
+<style>
+ .posts {
+border-radius:10px;
+box-shadow:0 10px 16px rgba(0,0,0,.25);
+padding:40px;
+margin-top:40px;
+ }
+ img{
+   border-radius:10px; 
+   box-shadow:0 40px 16px rgba(0,0,0,.25);
+ }
+</style>
+
+<section class="posts">
+    <article>
+        <h2>{{ post.title }}</h2>
+        <div class="metadata">
+            2024-10-15 at 18:30 by ahmed
+            <span class="badge bg-success">{{ post.getCategory().title }}</span>
+            5 comments
+        </div>
+        <div class="content">
+            <img src="https://picsum.photos/seed/picsum/200/200" alt="" class="mt-3 mb-3">
+            <p>{{ post.getContent() }}</p>
+            <!--<a href="#">Read more</a>--!>
+        </div>
+    </article>
+</section>
+
+<h2  class="mt-4">Comments</h2>
+<section class="mt-4">
+    <div class="card-header">
+        Mohamed<small> 2021-10-16 at 11:40</small>
+    </div>
+    <div class="card-body">
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in bibendum est, eget vulputate lorem. Vivamus efficitur justo vel risus fermentum ultricies. Nulla facilisi. Proin eu mollis ipsum, non volutpat leo. Vestibulum auctor auctor nisl. Duis in nisi sit amet odio dictum ultricies. Curabitur sed odio quis elit sollicitudin aliquet nec in velit. In posuere velit eu mauris feugiat, at dignissim nisl consectetur. Aliquam malesuada sem id neque tristique condimentum. Etiam vel scelerisque lectus. Duis sed dui et est maximus varius. Sed dignissim dui eget orci molestie, a cursus felis lobortis.</p>
+    </div>
+</section>
+
+{% endblock %}
